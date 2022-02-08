@@ -1,22 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/08 15:40:52 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/08 17:29:23 by ealonso-         ###   ########.fr       */
+/*   Created: 2022/02/08 17:10:06 by ealonso-          #+#    #+#             */
+/*   Updated: 2022/02/08 17:29:26 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-char	*get_next_line(int fd)
-{
-	char	*lineres;
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
 
-	if (!fd)
-		return (NULL);
-	read (fd, lineres, BUFFER_SIZE);
-}
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 4096
+# endif
+
+char	*get_next_line(int fd);
+
+#endif
