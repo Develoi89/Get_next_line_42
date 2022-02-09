@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 15:40:52 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/08 19:23:13 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/09 17:03:17 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 
 char	*get_next_line(int fd)
 {
-	char	*lineres;
+	static char	buf[33];
 
-	lineres = NULL;
 	if (!fd)
 		return (NULL);
-	read (fd, lineres, BUFFER_SIZE);
-	return (lineres);
+	read (fd, buf, 32);
+	return (buf);
 }
 
 int	main(void)
 {
 	int	fd;
 
-	fd = open("text.txt", O_RDONLY);
+	fd = open("/Users/ealonso-/Desktop/Proyectos_cursus_home/Get_next_line/text.txt", O_RDONLY);
 	printf("prueba: %s", get_next_line(fd));
 	close(fd);
 	return (0);
