@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 17:10:06 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/09 18:46:46 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/14 16:36:05 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,27 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <fcntl.h>
+# include <string.h>
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*new;
+	size_t	i;
+
+	if (!s)
+		return (NULL);
+	if (start >= ft_strlen(s))
+		return (ft_strdup(""));
+	if (ft_strlen(s) > len)
+		i = len;
+	else
+		i = ft_strlen(s);
+	new = malloc(i + 1 * sizeof(char));
+	if (!new)
+		return (NULL);
+	ft_strlcpy(new, s + start, i + 1);
+	return (new);
+}
 
 char	*ft_strchr(const char *s, int c)
 {
