@@ -5,74 +5,72 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/08 15:40:52 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/15 15:10:30 by ealonso-         ###   ########.fr       */
+/*   Created: 2022/02/15 17:16:13 by ealonso-          #+#    #+#             */
+/*   Updated: 2022/02/15 18:50:09 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_foundit(char *buf, char *str, char *rest)
+char	*ft_foundit(char *buf, char *rest)
 {
-	size_t	lenbuf;
-	size_t	lennbuf;
-	size_t	i;
-	char	*temp;
+	char	*str;
 
-	lenbuf = ft_strlen(buf);
-	lennbuf = ft_strlen(ft_strchr(buf, '\n'));
-	i = (ft_strlen(buf) - ft_strlen(ft_strchr(buf, '\n')));
-	temp = ft_substr(buf, 0, i +1);
-	if (!temp)
-		return (NULL);
-	str = ft_strjoin(rest, temp);
-	if (!str)
-		return (NULL);
-	free (rest);
-	free (temp);
-	rest = ft_substr(buf, i + 1, lenbuf + 1);
-	if (!rest)
-		return (NULL);
-	free (buf);
-	return (str);
+	
+}
+
+void	*ft_saveit(char *buf, char *rest)
+{
+	if (rest == null)
+	{
+		rest = ft_substr(buf, 0, ft_strlen(buf));
+		rest[ft_strlen(rest)] = '\0';
+	}
+	else
+	{
+		ft_strjoin(rest, buf);
+		rest[ft_strlen(rest)] = '\0';
+	}
 }
 
 char	*get_next_line(int fd)
 {
 	char		*buf;
 	static char	*rest;
-	char		*str;
+	int			nbr;
 
-	str = NULL;
-	if (!fd)
-		return (NULL);
+	if (ft_strchr(rest, '\n'))
+		return (ft_doblejump(rest));
 	buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buf)
+	if (!buf || !fd)
 		return (NULL);
-	while (buf)
+	nbr = read(fd, buf, BUFFER_SIZE);
+	if (nbr == 0)
+		return (NULL);
+	buf[BUFFER_SIZE] = '\0';
+	if (ft_strchr(buf, '\n'))
+		return (ft_foundit());
+	else
 	{
-		read (fd, buf, BUFFER_SIZE);
-		if (ft_strchr(buf, '\n'))
-			return (ft_foundit(buf, str, rest));
-		else
-		{
-			if (rest == NULL)
-				rest = buf;
-			rest = ft_strjoin(rest, buf);
-			if (!rest)
-				return (NULL);
-		}
+		ft_saveit(buf, rest);
+		free (buf);
+		if (nbr != 0)
+			get_next_line(fd);
 	}
-	return (NULL);
 }
 
 int	main(void)
 {
-	int	fd;
+	int		fd;
 
 	fd = open("/Users/ealonso-/Desktop/Proyectos_cursus_home/Get_next_line/text.txt", O_RDONLY);
 	while (fd)
+	{
 		printf("prueba: %s", get_next_line(fd));
+		if (!get_next_line(fd))
+			return (0);
+	}
+	free (get_next_line(fd));
 	close(fd);
 	return (0);
 }
