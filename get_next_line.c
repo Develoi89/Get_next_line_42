@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 15:40:52 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/14 19:46:10 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/15 15:10:30 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ char	*ft_foundit(char *buf, char *str, char *rest)
 	if (!str)
 		return (NULL);
 	free (rest);
+	free (temp);
 	rest = ft_substr(buf, i + 1, lenbuf + 1);
 	if (!rest)
 		return (NULL);
+	free (buf);
 	return (str);
 }
 
