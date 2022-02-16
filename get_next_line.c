@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 17:16:13 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/16 16:28:55 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/16 18:02:17 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,12 @@ void	*ft_saveit(char *buf, char *rest)
 	if (rest == NULL)
 	{
 		rest = ft_substr(buf, 0, ft_strlen(buf));
-		rest[ft_strlen(rest)] = '\0';
 	}
 	else
 	{
-		ft_strjoin(rest, buf);
-		rest[ft_strlen(rest)] = '\0';
+		rest = ft_strjoin(rest, buf);
 	}
-	return (0);
+	return (rest);
 }
 
 char	*get_next_line(int fd)
@@ -67,7 +65,7 @@ char	*get_next_line(int fd)
 	static char	*rest;
 	int			nbr;
 
-	if (ft_strchr(rest, '\n'))
+	if (rest && ft_strchr(rest, '\n'))
 		return (ft_doblejump(rest));
 	buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buf || !fd)
@@ -75,19 +73,20 @@ char	*get_next_line(int fd)
 	nbr = read(fd, buf, BUFFER_SIZE);
 	if (nbr == 0)
 		return (NULL);
-	buf[BUFFER_SIZE] = '\0';
+	buf[nbr] = '\0';
 	if (ft_strchr(buf, '\n'))
 		return (ft_foundit(buf, rest));
 	else
 	{
-		ft_saveit(buf, rest);
+		rest = ft_saveit(buf, rest);
+		//printf("%s", rest);
 		free (buf);
 		if (nbr != 0)
 			get_next_line(fd);
 		else
 			return (NULL);
 	}
-	return (0);
+	return (rest);
 }
 
 int	main(void)
