@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 17:16:13 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/15 18:50:09 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/16 16:17:52 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,41 @@
 
 char	*ft_foundit(char *buf, char *rest)
 {
+	size_t	lenbuf;
+	size_t	lennbuf;
+	char	*temp;
 	char	*str;
 
-	
+	lenbuf = ft_strlen(buf);
+	lennbuf = ft_strlen(ft_strchr(buf, '\n'));
+	temp = ft_substr(buf, 0, (lenbuf - lennbuf + 1));
+	str = ft_strjoin(rest, temp);
+	free (temp);
+	free (rest);
+	rest = ft_substr(buf, (lenbuf - lennbuf + 2), lenbuf + 1);
+	return (str);
+}
+
+char	*ft_doblejump(char *rest)
+{
+	size_t	lenrest;
+	size_t	lennrest;
+	char	*temp;
+	char	*line;
+
+	lenrest = ft_strlen(rest);
+	lennrest = ft_strlen(ft_strchr(rest, '\n'));
+	line = ft_substr(rest, 0, (lenrest - lennrest) + 1);
+	temp = ft_stbstr(rest, (lenrest - lennrest) + 2, lenrest + 1);
+	free (rest);
+	rest = temp;
+	free (temp);
+	return (line);
 }
 
 void	*ft_saveit(char *buf, char *rest)
 {
-	if (rest == null)
+	if (rest == NULL)
 	{
 		rest = ft_substr(buf, 0, ft_strlen(buf));
 		rest[ft_strlen(rest)] = '\0';
@@ -49,7 +76,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	buf[BUFFER_SIZE] = '\0';
 	if (ft_strchr(buf, '\n'))
-		return (ft_foundit());
+		return (ft_foundit(buf, rest));
 	else
 	{
 		ft_saveit(buf, rest);
@@ -61,7 +88,7 @@ char	*get_next_line(int fd)
 
 int	main(void)
 {
-	int		fd;
+	int	fd;
 
 	fd = open("/Users/ealonso-/Desktop/Proyectos_cursus_home/Get_next_line/text.txt", O_RDONLY);
 	while (fd)
