@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 17:16:13 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/16 16:17:52 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/16 16:28:55 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*ft_doblejump(char *rest)
 	lenrest = ft_strlen(rest);
 	lennrest = ft_strlen(ft_strchr(rest, '\n'));
 	line = ft_substr(rest, 0, (lenrest - lennrest) + 1);
-	temp = ft_stbstr(rest, (lenrest - lennrest) + 2, lenrest + 1);
+	temp = ft_substr(rest, (lenrest - lennrest) + 2, lenrest + 1);
 	free (rest);
 	rest = temp;
 	free (temp);
@@ -58,6 +58,7 @@ void	*ft_saveit(char *buf, char *rest)
 		ft_strjoin(rest, buf);
 		rest[ft_strlen(rest)] = '\0';
 	}
+	return (0);
 }
 
 char	*get_next_line(int fd)
@@ -83,7 +84,10 @@ char	*get_next_line(int fd)
 		free (buf);
 		if (nbr != 0)
 			get_next_line(fd);
+		else
+			return (NULL);
 	}
+	return (0);
 }
 
 int	main(void)
