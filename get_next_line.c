@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 17:16:13 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/17 19:19:39 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/21 19:10:39 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,20 @@ char	*ft_foundit(char *buf, char **rest, char **str)
 	size_t	lennbuf;
 	char	*aux;
 
+	if (buf[0] == '\0')
+	{
+		aux = *str;
+		free (buf);
+		*rest = NULL;
+		return (aux);
+	}
 	lenbuf = ft_strlen(buf);
 	lennbuf = ft_strlen(ft_strchr(buf, '\n'));
 	aux = *str;
 	*str = ft_strjoin(aux, ft_substr(buf, 0, (lenbuf - lennbuf + 1)));
 	free (aux);
-	*rest = ft_substr(buf, (lenbuf - lennbuf + 1), lenbuf + 1);
+	*rest = ft_substr(buf, (lenbuf - lennbuf + 1), lenbuf);
+	free (buf);
 	return (*str);
 }
 
@@ -36,8 +44,8 @@ char	*ft_doblejump(char **rest)
 
 	lenrest = ft_strlen(*rest);
 	lennrest = ft_strlen(ft_strchr(*rest, '\n'));
-	line = ft_substr(*rest, 0, (lenrest - lennrest) + 1);
-	temp = ft_substr(*rest, (lenrest - lennrest) + 2, lenrest + 1);
+	line = ft_substr(*rest, 0, (lenrest - lennrest));
+	temp = ft_substr(*rest, (lenrest - lennrest) + 1, lenrest);
 	free (*rest);
 	*rest = temp;
 	free (temp);
@@ -62,7 +70,7 @@ void	*ft_saveit(char *buf, char **str)
 
 	if (*str == NULL)
 	{
-		*str = ft_substr(buf, 0, ft_strlen(buf) + 1);
+		*str = ft_substr(buf, 0, ft_strlen(buf));
 		if (!*str)
 			return (NULL);
 	}
@@ -94,16 +102,19 @@ char	*get_next_line(int fd)
 	while (nbr != 0)
 	{
 		nbr = read(fd, buf, BUFFER_SIZE);
+		if (nbr == -1)
+		{
+			free (buf);
+			return (NULL);
+		}
 		buf[nbr] = '\0';
-		if (ft_strchr(buf, '\n'))
+		if (ft_strchr(buf, '\n') || nbr == 0)
 			return (ft_foundit(buf, &rest, &str));
 		else
-		{
 			str = ft_saveit(buf, &str);
-		}
 	}
 	free(buf);
-	return (str);
+	return (NULL);
 }
 
 // int	main(void)
@@ -113,7 +124,7 @@ char	*get_next_line(int fd)
 // 	int		i = 0;
 
 // 	fd = open("/Users/ealonso-/Desktop/Proyectos_cursus_home/Get_next_line/text.txt", O_RDONLY);
-// 	while (i < 28)
+// 	while (i < 60)
 // 	{
 // 		aux = get_next_line(fd);
 // 		printf("prueba: %s", aux);

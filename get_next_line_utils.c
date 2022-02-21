@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 19:10:09 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/14 19:14:58 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/21 18:50:26 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,46 +67,30 @@ char	*ft_strchr(const char *s, int c)
 		return (r);
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	if (!dest && !src)
-		return (0);
-	if (dest > src)
-	{
-		while (n)
-		{
-			n--;
-			*((unsigned char *)(dest + n)) = *((unsigned char *)(src + n));
-		}
-	}
-	else
-	{
-		while (i < n)
-		{
-			*((unsigned char *)(dest + i)) = *((unsigned char *)(src + i));
-			i++;
-		}
-	}	
-	return (dest);
-}
-
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len1;
-	size_t	len2;
-	char	*join;
+	char	*new_s;
+	size_t	s1_len;
+	size_t	s2_len;
+	int		aux1;
+	int		aux2;
 
-	if (!s1 || !s2)
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	aux1 = 0;
+	aux2 = 0;
+	new_s = malloc(s1_len + s2_len + 1);
+	if (!s1 || !s2 || !new_s)
 		return (NULL);
-	len1 = ft_strlen(s1);
-	len2 = ft_strlen(s2);
-	join = malloc(len1 + len2 + 1 * sizeof(char));
-	if (!join)
-		return (NULL);
-	ft_memmove(join, s1, len1);
-	ft_memmove(join + len1, s2, len2 + 1);
-	return (join);
+	while (s1[aux1])
+	{
+		new_s[aux1] = s1[aux1];
+		aux1++;
+	}
+	while (s2[aux2])
+	{
+		new_s[aux1++] = s2[aux2++];
+	}
+	new_s[aux1] = '\0';
+	return (new_s);
 }

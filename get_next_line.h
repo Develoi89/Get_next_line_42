@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 17:10:06 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/14 19:14:49 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/21 18:21:59 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 size_t	ft_strlen(const char *str);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strchr(const char *s, int c);
-void	*ft_memmove(void *dest, const void *src, size_t n);
 char	*ft_strjoin(char const *s1, char const *s2);
 
 # ifndef BUFFER_SIZE
