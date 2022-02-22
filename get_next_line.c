@@ -5,116 +5,95 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/15 17:16:13 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/21 19:10:39 by ealonso-         ###   ########.fr       */
+/*   Created: 2022/02/22 15:39:37 by ealonso-          #+#    #+#             */
+/*   Updated: 2022/02/22 19:35:04 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_foundit(char *buf, char **rest, char **str)
-{
-	size_t	lenbuf;
-	size_t	lennbuf;
-	char	*aux;
-
-	if (buf[0] == '\0')
-	{
-		aux = *str;
-		free (buf);
-		*rest = NULL;
-		return (aux);
-	}
-	lenbuf = ft_strlen(buf);
-	lennbuf = ft_strlen(ft_strchr(buf, '\n'));
-	aux = *str;
-	*str = ft_strjoin(aux, ft_substr(buf, 0, (lenbuf - lennbuf + 1)));
-	free (aux);
-	*rest = ft_substr(buf, (lenbuf - lennbuf + 1), lenbuf);
-	free (buf);
-	return (*str);
-}
-
-char	*ft_doblejump(char **rest)
-{
-	size_t	lenrest;
-	size_t	lennrest;
-	char	*temp;
-	char	*line;
-
-	lenrest = ft_strlen(*rest);
-	lennrest = ft_strlen(ft_strchr(*rest, '\n'));
-	line = ft_substr(*rest, 0, (lenrest - lennrest));
-	temp = ft_substr(*rest, (lenrest - lennrest) + 1, lenrest);
-	free (*rest);
-	*rest = temp;
-	free (temp);
-	return (line);
-}
-
-char	*ft_1ststep(char **rest)
-{
-	if (*rest)
-	{
-		if (ft_strchr(*rest, '\n'))
-			return (ft_doblejump(rest));
-		else
-			return (ft_substr(*rest, 0, strlen(*rest)));
-	}
-	return (NULL);
-}
-
-void	*ft_saveit(char *buf, char **str)
-{
-	char	*aux;
-
-	if (*str == NULL)
-	{
-		*str = ft_substr(buf, 0, ft_strlen(buf));
-		if (!*str)
-			return (NULL);
-	}
-	else
-	{
-		aux = *str;
-		*str = ft_strjoin(aux, buf);
-		free (aux);
-		if (!*str)
-			return (NULL);
-	}
-	return (*str);
-}
+char	*go_to_read(char *rest, int fd);
+char	*go_to_split_it(char *rest);
+char	*save_the_rest(char *rest);
 
 char	*get_next_line(int fd)
 {
-	char		*buf;
+	char		*line;
 	static char	*rest;
-	int			nbr;
-	char		*str;
 
-	nbr = 1;
-	str = ft_1ststep(&rest);
-	if (str && ft_strchr(str, '\n'))
-		return (str);
-	buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (!buf || !fd)
+	if (BUFFER_SIZE <= 0 || fd <= 0)
+		return (0);
+	rest = go_to_read(rest, fd);
+	if (!rest)
 		return (NULL);
-	while (nbr != 0)
+	line = go_to_split_it(rest);
+	rest = save_the_rest(rest);
+	return (line);
+}
+
+char	*go_to_read(char *rest, int fd)
+{
+	char	*buff;
+	int		nbr;
+
+	buff = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buff)
+		return (NULL);
+	nbr = 1;
+	while (nbr && !ft_strchr(rest, '\n'))
 	{
-		nbr = read(fd, buf, BUFFER_SIZE);
-		if (nbr == -1)
+		nbr = read(fd, buff, BUFFER_SIZE);
+		if (nbr < 0)
 		{
-			free (buf);
+			free (buff);
 			return (NULL);
 		}
-		buf[nbr] = '\0';
-		if (ft_strchr(buf, '\n') || nbr == 0)
-			return (ft_foundit(buf, &rest, &str));
-		else
-			str = ft_saveit(buf, &str);
+		buff[nbr] = '\0';
+		rest = ft_strjoin(rest, buff);
 	}
-	free(buf);
-	return (NULL);
+	free (buff);
+	return (rest);
+}
+
+char	*go_to_split_it(char *rest)
+{
+	int		i;
+	char	*line;
+
+	i = 0;
+	while (rest[i] && rest[i] != '\n')
+		i++;
+	line = malloc((i + 2) * sizeof(char));
+	if (!line)
+		return (NULL);
+	i = -1;
+	while (rest[i++] != '\n')
+		line[i] = rest[i];
+	line[i] = '\n';
+	line[i++] = '\0';
+	return (line);
+}
+
+char	*save_the_rest(char *rest)
+{
+	int		i;
+	int		j;
+	int		len;
+	char	*bck;
+
+	i = 0;
+	while (rest[i] && rest[i] != '\n')
+		i++;
+	len = ft_strlen(rest) -i;
+	bck = malloc((len + 1) * sizeof(char));
+	if (!bck)
+		return (NULL);
+	j = -1;
+	while (rest[i++])
+		bck[j++] = rest[i];
+	bck[j] = '\0';
+	free (rest);
+	return (bck);
 }
 
 // int	main(void)
@@ -124,13 +103,14 @@ char	*get_next_line(int fd)
 // 	int		i = 0;
 
 // 	fd = open("/Users/ealonso-/Desktop/Proyectos_cursus_home/Get_next_line/text.txt", O_RDONLY);
-// 	while (i < 60)
+// 	while (i < 20)
 // 	{
 // 		aux = get_next_line(fd);
-// 		printf("prueba: %s", aux);
+// 		printf("%s", aux);
+// 		free (aux);
+// 		aux = NULL;
 // 		i++;
 // 	}
-// 	free (get_next_line(fd));
 // 	close(fd);
 // 	return (0);
 // }

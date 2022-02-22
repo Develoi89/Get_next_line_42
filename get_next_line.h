@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/08 17:10:06 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/21 18:21:59 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/22 17:42:20 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@
 # include <fcntl.h>
 # include <string.h>
 
-size_t	ft_strlen(const char *str);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char const *s1, char const *s2);
+size_t	ft_strlen(char *s);
+char	*ft_strchr(char *s, int c);
+char	*ft_strjoin(char *s1, char *s2);
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 4096
