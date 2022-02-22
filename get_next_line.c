@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:39:37 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/22 19:35:04 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/22 19:55:21 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	*go_to_split_it(char *rest)
 	if (!line)
 		return (NULL);
 	i = -1;
-	while (rest[i++] != '\n')
+	while (rest[i++] && rest[i] != '\n')
 		line[i] = rest[i];
 	line[i] = '\n';
 	line[i++] = '\0';
