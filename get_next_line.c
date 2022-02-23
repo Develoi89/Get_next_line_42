@@ -6,7 +6,7 @@
 /*   By: ealonso- <ealonso-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/22 15:39:37 by ealonso-          #+#    #+#             */
-/*   Updated: 2022/02/22 19:55:21 by ealonso-         ###   ########.fr       */
+/*   Updated: 2022/02/23 15:42:12 by ealonso-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ char	*get_next_line(int fd)
 	char		*line;
 	static char	*rest;
 
-	if (BUFFER_SIZE <= 0 || fd <= 0)
-		return (0);
+	if (BUFFER_SIZE < 0 || fd < 0)
+		return (NULL);
 	rest = go_to_read(rest, fd);
 	if (!rest)
 		return (NULL);
@@ -43,9 +43,9 @@ char	*go_to_read(char *rest, int fd)
 	while (nbr && !ft_strchr(rest, '\n'))
 	{
 		nbr = read(fd, buff, BUFFER_SIZE);
-		if (nbr < 0)
+		if (nbr == -1)
 		{
-			free (buff);
+			free(buff);
 			return (NULL);
 		}
 		buff[nbr] = '\0';
@@ -61,16 +61,25 @@ char	*go_to_split_it(char *rest)
 	char	*line;
 
 	i = 0;
+	if (!rest[i])
+		return (NULL);
 	while (rest[i] && rest[i] != '\n')
 		i++;
 	line = malloc((i + 2) * sizeof(char));
 	if (!line)
 		return (NULL);
-	i = -1;
-	while (rest[i++] && rest[i] != '\n')
+	i = 0;
+	while (rest[i] && rest[i] != '\n')
+	{
 		line[i] = rest[i];
-	line[i] = '\n';
-	line[i++] = '\0';
+		i++;
+	}
+	if (rest[i] == '\n')
+	{
+		line[i] = '\n';
+		i++;
+	}
+	line[i] = '\0';
 	return (line);
 }
 
@@ -84,33 +93,20 @@ char	*save_the_rest(char *rest)
 	i = 0;
 	while (rest[i] && rest[i] != '\n')
 		i++;
+	if (!rest[i])
+	{
+		free(rest);
+		return (NULL);
+	}
 	len = ft_strlen(rest) -i;
 	bck = malloc((len + 1) * sizeof(char));
 	if (!bck)
 		return (NULL);
-	j = -1;
-	while (rest[i++])
-		bck[j++] = rest[i];
+	j = 0;
+	i++;
+	while (rest[i])
+		bck[j++] = rest[i++];
 	bck[j] = '\0';
 	free (rest);
 	return (bck);
 }
-
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*aux;
-// 	int		i = 0;
-
-// 	fd = open("/Users/ealonso-/Desktop/Proyectos_cursus_home/Get_next_line/text.txt", O_RDONLY);
-// 	while (i < 20)
-// 	{
-// 		aux = get_next_line(fd);
-// 		printf("%s", aux);
-// 		free (aux);
-// 		aux = NULL;
-// 		i++;
-// 	}
-// 	close(fd);
-// 	return (0);
-// }
