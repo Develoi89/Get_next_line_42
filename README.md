@@ -17,8 +17,8 @@
         <img src=".readmedata/3th_img.png"><br>
         And return a line attaching the first was be saved with the last was be readed until '\n', and save the two chars that was read from next line.<br>
         <img src=".readmedata/4th_img.png"><br>
-        Now you can execute 'Gnl' as many as you want to get next lines from file.
-        <a href="https://github.com/Develoi89/libft_42/blob/main/.readmedata/en.subject.pdf" target="blank" >subject</a>.<br>
+        Now you can execute 'Gnl' as many as you want to get next lines from file.<br>
+        You can find the PDF of complete subject <a href="https://github.com/Develoi89/libft_42/blob/main/.readmedata/en.subject.pdf" target="blank" >here.</a>.<br>
     </p>
     <h3>Compiling...⏱️</h3>
     <p>
