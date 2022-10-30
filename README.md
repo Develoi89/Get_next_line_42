@@ -22,7 +22,7 @@
     </p>
     <h3>Compiling...⏱️</h3>
     <p>
-        To compile the function I use a Makefile, you can modify here BUFFER_SIZE argument, I added too a main and text file to testing that you can modify or substitute your own. 
+        To compile the function I use a Makefile, you can modify here BUFFER_SIZE argument, I added too a main and text file to test that you can modify or substitute for your for own files. 
     </p>
     <h3>Grade</h3>
     <p>
